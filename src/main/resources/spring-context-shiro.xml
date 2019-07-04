@@ -2,11 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd 
 		http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
     
     <!-- 创建securityManager对象 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -23,9 +26,27 @@
             <value>
                 /login.html = anon
                 /sublogin = anon
+                /testRole = roles["admin","admin1"]
+                /testRole1 = rolesOr["admin","admin1"]
                 /* = authc
             </value>
         </property>
+        <property name="filters">
+            <util:map>
+                <entry key="rolesOr" value-ref="rolesOrFilter"/>
+            </util:map>
+        </property>
+    </bean>
+
+<!-- 
+    /testRole = roles["admin"]
+    /testRole1 = roles["admin","admin1"]
+    /testPerms = perms["user:delete"]
+    /testPerms1 = perms["user:delete","user:update"] 
+-->
+
+    <!-- 自定义Filter -->
+    <bean class="com.longlong.modules.system.shiro.filter.RolesOrFilter" id="rolesOrFilter">
     </bean>
 
     <bean id="realm" class="com.longlong.modules.system.shiro.realm.CustomRealm">
@@ -40,6 +61,7 @@
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
     
+    <!-- shiro授权生效的对象 -->
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager" />
     </bean>

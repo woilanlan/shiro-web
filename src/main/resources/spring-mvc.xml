@@ -24,4 +24,7 @@
 
 	<!-- 对静态资源文件的访问， 将无法mapping到Controller的path交给default servlet handler处理 不支持访问WEB-INF目录 -->
 	<mvc:default-servlet-handler />
+	
+	<!-- 启用aop注解 -->
+	<aop:config proxy-target-class="true"></aop:config>
 </beans>

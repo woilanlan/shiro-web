@@ -56,7 +56,16 @@ public class UserDaoImpl implements UserDao {
         return list;
     }
 
-    
+    @Override
+    public List<String> queryPermissionsByUsername(String username) {
+        String sql = "select rp.permission from user_roles ur join roles_permissions rp on ur.role_name = rp.role_name where ur.username = ?";
+        List<String> list = jt.query(sql,new String[]{username},new RowMapper<String>(){
+            @Override
+            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getString("permission");
+            }
+        });
+        return list;
+    }
 
-    
 }
