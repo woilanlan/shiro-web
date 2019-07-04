@@ -1,5 +1,6 @@
 package com.longlong.modules.system.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.longlong.modules.system.vo.User;
 
 import org.apache.shiro.SecurityUtils;
@@ -20,10 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
 
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
-
-    @RequestMapping(value = "/sublogin",method = RequestMethod.POST,produces = "application/json; charset=UTF-8")
+    
+    //produces = "application/json; charset=UTF-8"
+    @RequestMapping(value = "/sublogin",method = RequestMethod.POST)
     @ResponseBody
     public String subLogin(User user) {
+        JSONObject json = new JSONObject();
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
         try {
@@ -31,12 +34,14 @@ public class UserController {
         } catch (AuthenticationException e) {
             return e.getMessage();
         }
-
+        
         if(subject.hasRole("admin")){
             log.info("有admin权限");
-            return "有admin权限";
+            json.put("info", "有admin权限");
+        }else{
+            json.put("info", "没有admin权限");
         }
-        return "没有admin权限";
+        return json.toJSONString();
     }
 
 /*     
@@ -65,7 +70,9 @@ public class UserController {
     @RequestMapping(value = "/testRole1",method = RequestMethod.GET)
     @ResponseBody
     public String testRole1() {
-        return "testRole1 success1";
+        JSONObject json = new JSONObject();
+        json.put("info", "testRole1 success1");
+        return json.toJSONString();
     }
 
     @RequestMapping(value = "/testPerms",method = RequestMethod.GET)
