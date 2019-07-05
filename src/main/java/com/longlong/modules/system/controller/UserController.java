@@ -1,5 +1,10 @@
 package com.longlong.modules.system.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.alibaba.fastjson.JSONObject;
 import com.longlong.modules.system.vo.User;
 
@@ -87,4 +92,19 @@ public class UserController {
         return "testPerms1 success";
     }
 
+    @RequestMapping(value = "/hello")
+    public String hello(HttpServletRequest req) {
+        List<String> list = new ArrayList<>();
+        list.add("111");
+        list.add("222");
+        req.setAttribute("user", "longlong");
+        req.setAttribute("list", list);
+        return "hello";
+    }
+
+    @RequestMapping(value = "/one")
+    public String one(HttpServletRequest req) {
+        req.setAttribute("user", "longlong");
+        return "one";
+    }
 }
