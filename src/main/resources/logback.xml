@@ -53,7 +53,7 @@
         <appender-ref ref="INFO-APPENDER" />
     </logger>
     <!-- 也是<loger>元素，但是它是根loger。只有一个level属性，应为已经被命名为"root". -->
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="DEFAULT-APPENDER"/>
     </root>
